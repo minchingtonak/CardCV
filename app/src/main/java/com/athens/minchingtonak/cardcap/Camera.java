@@ -1,10 +1,11 @@
 package com.athens.minchingtonak.cardcap;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -13,6 +14,9 @@ import android.view.View;
  * status bar and navigation/system bar) with user interaction.
  */
 public class Camera extends AppCompatActivity {
+
+    CameraManager cm;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -106,6 +110,8 @@ public class Camera extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+        Context.getSystemService(CameraManager.class);
     }
 
     @Override
