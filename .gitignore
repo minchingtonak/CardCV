@@ -1,3 +1,10 @@
+*.jpg
+*.jpeg
+*.png
+
+.idea/
+*.pyc
+
 # Built application files
 *.apk
 *.ap_
