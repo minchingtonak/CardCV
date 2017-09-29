@@ -15,16 +15,22 @@ headers = {
 
 def getProbs(r):
     parsed = json.loads(r.text)
-    tags = [parsed['Predictions'][n]['Tag']
-            for n in range(0, len(parsed['Predictions']))]
-    probabilities = [parsed['Predictions'][n]['Probability']
-                     for n in range(0, len(parsed['Predictions']))]
+    try:
+        tags = [parsed['Predictions'][n]['Tag']
+                for n in range(0, len(parsed['Predictions']))]
+        probabilities = [parsed['Predictions'][n]['Probability']
+                         for n in range(0, len(parsed['Predictions']))]
+    except KeyError:
+        print("Server not reached")
     return tags, probabilities
 
 
 if __name__ == '__main__':
 
-    cap = cv2.VideoCapture(1)
+    blank_image = np.zeros((480, 640, 3), np.uint8)
+    blank_image[:, 0:640] = (255, 255, 255)
+
+    cap = cv2.VideoCapture(0)
 
     font = cv2.FONT_HERSHEY_PLAIN
     cnt = 0
@@ -34,7 +40,7 @@ if __name__ == '__main__':
         ret, frame = cap.read()
         cv2.imshow("frame", frame)
 
-        if cnt % 30 == 0:
+        if cnt % 1 == 0:
             # isolation code here
             cv2.imwrite('unblemished.jpg', frame)
 
@@ -100,7 +106,6 @@ if __name__ == '__main__':
                     cv2.imshow('crop', cropped)
                     # end isolation code
 
-                    cv2.imshow('pass', cv2.imread('crop.jpg'))
                     with open("crop.jpg", "rb") as imageFile:
                         f = imageFile.read()
                         b = bytearray(f)
@@ -114,12 +119,12 @@ if __name__ == '__main__':
 
                     n = 0
                     for key, val in zip(largetag, largeval):
-                        cv2.putText(im3, str((key, val))[2:len(str((key, val))) - 1], (10, 50 + n), font,
-                                    2, (0, 0, 0), 1, cv2.LINE_AA)
+                        cv2.putText(blank_image, str((key, val))[2:len(str((key, val))) - 1], (10, 50 + n), font,
+                                    2, (255, 255, 255), 1, cv2.LINE_AA)
                         n += 50
-                    # cv2.imshow("every30", frame)
+                    cv2.imshow("every30", frame)
                     cv2.imshow('im3', im3)
-
+                    cv2.imshow("Labels", blank_image)
 
         k = cv2.waitKey(1)
         if k == 27:
